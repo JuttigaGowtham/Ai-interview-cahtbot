@@ -1,39 +1,42 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 // --- SVG Icon Components ---
-const AttachmentIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-paperclip">
-        <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.59a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+const PlusIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+);
+
+const MicrophoneIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-mic">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+        <line x1="12" y1="19" x2="12" y2="22"/>
     </svg>
 );
 
 const SendIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-send-horizontal">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-send-horizontal">
         <path d="m3 3 3 9-3 9 19-9Z" />
         <path d="M6 12h16" />
     </svg>
 );
 
-const BotIcon = ({ className }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`lucide lucide-bot ${className}`}>
-        <rect width="18" height="10" x="3" y="11" rx="2" />
-        <circle cx="12" cy="5" r="2" />
-        <path d="M12 7v4" />
-        <line x1="8" x2="8" y1="16" y2="16" />
-        <line x1="16" x2="16" y1="16" y2="16" />
+const AiIcon = ({ className }) => (
+     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`lucide lucide-brain-circuit ${className}`}>
+        <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A3 3 0 1 0 12 18Z"/><path d="M12 12a4 4 0 0 0 3.444-6.052A3 3 0 1 1 20 10Z"/><path d="m14.25 7.75 1.5 1.5"/><path d="M4.5 13.5h-1a2 2 0 0 1-2-2v-1a2 2 0 0 1 2-2h1"/><path d="M19.5 13.5h1a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2h-1"/><path d="M12 18v2"/><path d="M12 4V2"/><circle cx="12" cy="12" r="2"/><path d="M4.5 10.5v-1"/><path d="M19.5 10.5v-1"/>
     </svg>
 );
 
-const UserIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-user-circle">
+const UserIcon = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`lucide lucide-user-circle ${className}`}>
         <circle cx="12" cy="12" r="10" />
         <circle cx="12" cy="10" r="3" />
         <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
     </svg>
 );
 
+
 const RestartIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-refresh-cw">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-refresh-cw">
         <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
         <path d="M21 3v5h-5"/>
         <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
@@ -42,7 +45,7 @@ const RestartIcon = () => (
 );
 
 const DashboardIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-layout-dashboard">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-layout-dashboard">
         <rect width="7" height="9" x="3" y="3" rx="1"/>
         <rect width="7" height="5" x="14" y="3" rx="1"/>
         <rect width="7" height="9" x="14" y="12" rx="1"/>
@@ -50,41 +53,77 @@ const DashboardIcon = () => (
     </svg>
 );
 
-const MicrophoneIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-mic">
-        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-        <line x1="12" y1="19" x2="12" y2="22"/>
-    </svg>
-);
-
 const MenuIcon = ({ className }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
         <line x1="4" x2="20" y1="12" y2="12" />
         <line x1="4" x2="20" y1="6" y2="6" />
         <line x1="4" x2="20" y1="18" y2="18" />
     </svg>
 );
 
+const TimerIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-timer text-neutral-400"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+);
+
+const ArrowLeftIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+);
+
+// --- Night Sky Background Component ---
+const NightSky = () => {
+    const [stars, setStars] = useState([]);
+    useEffect(() => {
+        const generatedStars = Array.from({ length: 150 }).map(() => ({
+            id: Math.random(),
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+            animationDuration: `${2 + Math.random() * 3}s`,
+            animationDelay: `${Math.random() * 5}s`,
+            size: `${1 + Math.random() * 1.5}px`
+        }));
+        setStars(generatedStars);
+    }, []);
+
+    return (
+        <div className="fixed top-0 left-0 w-full h-full bg-gradient-to-b from-black via-black to-black overflow-hidden -z-10">
+            {stars.map(star => (
+                <div
+                    key={star.id}
+                    className="absolute bg-white rounded-full animate-twinkle"
+                    style={{
+                        top: star.top,
+                        left: star.left,
+                        width: star.size,
+                        height: star.size,
+                        animationDuration: star.animationDuration,
+                        animationDelay: star.animationDelay,
+                    }}
+                ></div>
+            ))}
+        </div>
+    );
+};
+
+
 // --- Sidebar Component ---
 const Sidebar = ({ isOpen, setView, handleRestart, onMouseLeave }) => (
     <aside
         onMouseLeave={onMouseLeave}
-        className={`fixed top-0 left-0 h-full bg-neutral-900 border-r border-neutral-800 z-30 text-white flex flex-col transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-20'}`}
+        className={`fixed top-0 left-0 h-full bg-black/30 backdrop-blur-md border-r border-neutral-800 z-30 text-white flex flex-col transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-20'}`}
     >
         <div className="flex items-center justify-center h-20 border-b border-neutral-800 shrink-0">
-             <MenuIcon className="w-8 h-8 text-white"/>
+              <MenuIcon className="w-8 h-8 text-white"/>
         </div>
         <nav className="flex-1 py-4">
             <ul>
                 <li>
-                    <button onClick={handleRestart} className="flex items-center w-full py-3 px-6 hover:bg-neutral-800 transition-colors" title="New Interview">
+                    <button onClick={handleRestart} className="flex items-center w-full py-3 px-6 hover:bg-neutral-800/80 transition-colors" title="New Interview">
                         <RestartIcon/>
                         <span className={`ml-4 font-medium whitespace-nowrap transition-opacity duration-200 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>New Interview</span>
                     </button>
                 </li>
                  <li>
-                    <button onClick={() => setView('dashboard')} className="flex items-center w-full py-3 px-6 hover:bg-neutral-800 transition-colors" title="Dashboard">
+                    <button onClick={() => setView('dashboard')} className="flex items-center w-full py-3 px-6 hover:bg-neutral-800/80 transition-colors" title="Dashboard">
                         <DashboardIcon/>
                         <span className={`ml-4 font-medium whitespace-nowrap transition-opacity duration-200 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>Dashboard</span>
                     </button>
@@ -94,49 +133,153 @@ const Sidebar = ({ isOpen, setView, handleRestart, onMouseLeave }) => (
     </aside>
 );
 
-// --- Dashboard Component ---
-const Dashboard = ({ results, switchToChat }) => (
-    <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-black">
-        <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-neutral-200 mb-6">Interview Dashboard</h2>
-            <div className="bg-neutral-900 border border-neutral-800 rounded-lg shadow-lg">
-                <table className="w-full text-left text-sm text-neutral-300">
-                    <thead className="border-b border-neutral-700 text-xs text-neutral-400 uppercase tracking-wider">
-                        <tr>
-                            <th scope="col" className="px-6 py-4">Candidate Name</th>
-                            <th scope="col" className="px-6 py-4">Email</th>
-                            <th scope="col" className="px-6 py-4 text-right">Score</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {results.length > 0 ? (
-                            results.map((result) => (
-                                <tr key={result.id} className="border-b border-neutral-800 last:border-b-0 hover:bg-neutral-800/50">
-                                    <td className="px-6 py-4 font-medium whitespace-nowrap text-white">{result.name}</td>
-                                    <td className="px-6 py-4">{result.email}</td>
-                                    <td className="px-6 py-4 font-bold text-white text-right">{result.percentage}%</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="3" className="text-center py-16 text-neutral-500">No interview results yet.</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
-             <button onClick={switchToChat} className="mt-8 flex items-center gap-2 text-sm bg-neutral-800 hover:bg-neutral-700 text-neutral-300 px-4 py-2 rounded-full transition-colors">
-                Back to Chatbot
-            </button>
-        </div>
-    </div>
-);
+// --- Progress Circle Component for Dashboard ---
+const ProgressCircle = ({ percentage, value, label, subLabel, size = 110, strokeWidth = 8 }) => {
+    const radius = (size - strokeWidth) / 2;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (percentage / 100) * circumference;
 
+    return (
+        <div className="flex flex-col items-center text-center gap-2 bg-neutral-900/70 border border-neutral-800 p-6 rounded-2xl shadow-lg backdrop-blur-sm w-full h-full">
+            <div className="relative" style={{ width: size, height: size }}>
+                <svg width={size} height={size} className="absolute top-0 left-0 -rotate-90">
+                    <circle
+                        className="text-neutral-700"
+                        stroke="currentColor"
+                        strokeWidth={strokeWidth}
+                        fill="transparent"
+                        r={radius}
+                        cx={size / 2}
+                        cy={size / 2}
+                    />
+                    <circle
+                        className="text-indigo-400"
+                        stroke="currentColor"
+                        strokeWidth={strokeWidth}
+                        strokeDasharray={circumference}
+                        strokeDashoffset={offset}
+                        strokeLinecap="round"
+                        fill="transparent"
+                        r={radius}
+                        cx={size / 2}
+                        cy={size / 2}
+                        style={{ transition: 'stroke-dashoffset 0.5s ease-in-out' }}
+                    />
+                </svg>
+                <div className="w-full h-full flex items-center justify-center">
+                    <span className="text-3xl font-bold text-white">{value}</span>
+                </div>
+            </div>
+            <p className="text-base font-medium text-neutral-200 mt-3">{label}</p>
+            {subLabel && <p className="text-xs text-indigo-300 font-semibold">{subLabel}</p>}
+        </div>
+    );
+};
+
+
+// --- Dashboard Component ---
+const Dashboard = ({ results, switchToChat }) => {
+    const totalInterviews = results.length;
+    const averageScore = totalInterviews > 0 ? parseFloat((results.reduce((sum, r) => sum + r.percentage, 0) / totalInterviews).toFixed(1)) : 0;
+    const topPerformer = totalInterviews > 0 ? results.reduce((max, r) => r.percentage > max.percentage ? r : max, results[0]) : null;
+
+    return (
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-transparent">
+            <div className="max-w-4xl mx-auto">
+                 <div className="flex justify-between items-center mb-8">
+                    <h2 className="text-3xl font-bold text-neutral-200">Interview Dashboard</h2>
+                     <button onClick={switchToChat} className="flex items-center gap-2 text-sm bg-neutral-800 hover:bg-neutral-700 text-neutral-300 px-4 py-2 rounded-full transition-colors">
+                        <ArrowLeftIcon />
+                        Back to Chatbot
+                    </button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                   <ProgressCircle
+                        percentage={100} // Full circle for a total count
+                        value={totalInterviews}
+                        label="Total Interviews"
+                    />
+                    <ProgressCircle
+                        percentage={averageScore}
+                        value={`${averageScore}%`}
+                        label="Average Score"
+                    />
+                    <ProgressCircle
+                        percentage={topPerformer ? topPerformer.percentage : 0}
+                        value={topPerformer ? `${topPerformer.percentage}%` : 'N/A'}
+                        label="Top Performer"
+                        subLabel={topPerformer ? topPerformer.name : ''}
+                    />
+                </div>
+
+                <h3 className="text-xl font-bold text-neutral-300 mb-4">Recent Results</h3>
+                <div className="bg-neutral-900/70 border border-neutral-800 rounded-lg shadow-lg backdrop-blur-sm">
+                    <table className="w-full text-left text-sm text-neutral-300">
+                        <thead className="border-b border-neutral-700 text-xs text-neutral-400 uppercase tracking-wider">
+                            <tr>
+                                <th scope="col" className="px-6 py-4">Candidate Name</th>
+                                <th scope="col" className="px-6 py-4">Email</th>
+                                <th scope="col" className="px-6 py-4 text-right">Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {results.length > 0 ? (
+                                results.map((result) => (
+                                    <tr key={result.id} className="border-b border-neutral-800 last:border-b-0 hover:bg-neutral-800/50">
+                                        <td className="px-6 py-4 font-medium whitespace-nowrap text-white">{result.name}</td>
+                                        <td className="px-6 py-4">{result.email}</td>
+                                        <td className="px-6 py-4 font-bold text-white text-right">{result.percentage}%</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="3" className="text-center py-16 text-neutral-500">No interview results yet.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
+// --- Question Message Component ---
+const QuestionMessage = ({ question, timer, totalQuestions }) => {
+    const difficultyColors = {
+        easy: 'text-green-400 border-green-400',
+        medium: 'text-yellow-400 border-yellow-400',
+        hard: 'text-red-400 border-red-400',
+    };
+
+    return (
+        <div className="flex items-start gap-4">
+             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center border border-neutral-700">
+                <AiIcon className="w-5 h-5 text-white" />
+            </div>
+            <div className="max-w-md md:max-w-lg p-4 rounded-2xl shadow-md bg-neutral-800 text-neutral-200 rounded-bl-none w-full">
+                <div className="flex justify-between items-center mb-2">
+                    <p className="text-sm font-semibold text-neutral-300">Question {question.index + 1} of {totalQuestions}</p>
+                    <span className={`text-xs font-bold uppercase px-2 py-1 border rounded-full ${difficultyColors[question.difficulty]}`}>{question.difficulty}</span>
+                </div>
+                <p className="text-white mb-3">{question.question}</p>
+                <div className="flex justify-end items-center mt-2">
+                    <div className="flex items-center gap-2 bg-neutral-900/50 px-3 py-1 rounded-full border border-neutral-700">
+                        <TimerIcon />
+                        <p className="text-lg font-mono text-white font-semibold">{timer}<span className="text-sm text-neutral-400">s</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 // --- Main App Component ---
 const App = () => {
     const initialState = {
-        chatMessages: [{ sender: 'bot', text: "Hello! I am your AI interviewer. Please upload your resume to begin." }],
+        chatMessages: [{ sender: 'bot', text: "Hello! I am your AI interviewer. Please upload your resume to begin the interview." }],
         userInput: '',
         isLoading: false,
         error: '',
@@ -146,7 +289,7 @@ const App = () => {
         timer: null,
         userAnswers: [],
         resumeContext: null,
-        currentUser: { name: null, email: null },
+        currentUser: { name: null, email: null, phone: null },
         view: 'chatbot', // 'chatbot', 'dashboard'
         dashboardResults: [],
     };
@@ -191,15 +334,27 @@ const App = () => {
 
     useEffect(() => {
         if (interviewState === 'in_progress' && currentQuestionIndex < questions.length) {
-            const timeLimit = questions[currentQuestionIndex].timeLimit;
-            setTimer(timeLimit);
+            const currentQuestion = {
+                ...questions[currentQuestionIndex],
+                index: currentQuestionIndex
+            };
+            
+            // Add question to chat
+            setChatMessages(prev => [...prev, {
+                sender: 'bot',
+                type: 'question',
+                question: currentQuestion,
+                id: `q-${currentQuestionIndex}`
+            }]);
+
+            setTimer(currentQuestion.timeLimit);
             
             clearInterval(timerIntervalRef.current);
             timerIntervalRef.current = setInterval(() => {
                 setTimer(prev => {
                     if (prev <= 1) {
                         clearInterval(timerIntervalRef.current);
-                        handleNextQuestion(true);
+                        handleNextQuestion(true); // isTimeout = true
                         return 0;
                     }
                     return prev - 1;
@@ -238,10 +393,10 @@ const App = () => {
             const prompt = `You are an AI hiring assistant. Your first task is to analyze the provided resume.
             1. Validate if it contains a name, an email, and a phone number.
             2. If any are missing, respond ONLY with a JSON object like: {"validation": {"success": false, "missing": ["field1", "field2"]}}.
-            3. If all information is present, proceed to the next step. Extract the candidate's name and email.
+            3. If all information is present, proceed to the next step. Extract the candidate's name, email, and phone number.
             4. Generate exactly 6 interview questions based on the resume's skills and projects.
             5. The questions must include 2 'easy' (20 seconds), 2 'medium' (60 seconds), and 2 'hard' (120 seconds).
-            6. Respond ONLY with a JSON object like: {"validation": {"success": true, "name": "John Doe", "email": "john.doe@example.com"}, "questions": [{"question": "...", "difficulty": "easy", "timeLimit": 20}, ...]}. Do not include any other text, explanation or markdown formatting.`;
+            6. Respond ONLY with a JSON object like: {"validation": {"success": true, "name": "John Doe", "email": "john.doe@example.com", "phone": "123-456-7890"}, "questions": [{"question": "...", "difficulty": "easy", "timeLimit": 20}, ...]}. Do not include any other text, explanation or markdown formatting.`;
 
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
             const payload = {
@@ -263,9 +418,16 @@ const App = () => {
                 setChatMessages(prev => [...prev, { sender: 'bot', text: errorMessage }]);
                 setInterviewState('start');
             } else {
-                setCurrentUser({ name: parsedResult.validation.name, email: parsedResult.validation.email });
-                const welcomeMessage = `Hello ${parsedResult.validation.name}! I've reviewed your resume and generated 6 questions for our interview. We'll start with the first question now. Good luck!`;
-                setChatMessages(prev => [...prev, { sender: 'bot', text: welcomeMessage }]);
+                const { name, email, phone } = parsedResult.validation;
+                setCurrentUser({ name, email, phone });
+                const detailsMessage = `**Resume Details Verified:**\n- **Name:** ${name}\n- **Email:** ${email}\n- **Phone:** ${phone || 'Not found'}`;
+                const welcomeMessage = `Hello ${name}! I've reviewed your resume and generate  questions for our interview. We'll start with the first question now. Good luck!`;
+                
+                setChatMessages(prev => [...prev, 
+                    { sender: 'bot', text: detailsMessage },
+                    { sender: 'bot', text: welcomeMessage }
+                ]);
+
                 setQuestions(parsedResult.questions);
                 setInterviewState('in_progress');
             }
@@ -362,16 +524,10 @@ const App = () => {
         setView('chatbot');
     };
 
-    const currentQuestion = questions[currentQuestionIndex];
-    const difficultyColors = {
-        easy: 'text-green-400 border-green-400',
-        medium: 'text-yellow-400 border-yellow-400',
-        hard: 'text-red-400 border-red-400',
-    };
-
     return (
-        <div className="flex h-screen bg-black text-neutral-200 font-sans">
-            <div
+        <div className="flex h-screen bg-transparent text-neutral-200 font-mono">
+            <NightSky />
+             <div
                 className="fixed top-0 left-0 h-full w-20 z-40"
                 onMouseEnter={() => setIsSidebarOpen(true)}
             />
@@ -387,23 +543,37 @@ const App = () => {
                     <Dashboard results={dashboardResults} switchToChat={() => setView('chatbot')} />
                 ) : (
                     <>
-                        <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-40">
+                        <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-28">
                             <div className="max-w-3xl mx-auto space-y-8">
-                                {chatMessages.map((msg, index) => (
-                                    <div key={index} className={`flex items-start gap-4 ${msg.sender === 'user' ? 'justify-end' : ''}`}>
-                                        {msg.sender === 'bot' && (
-                                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center border border-neutral-700">
-                                                <BotIcon className="w-5 h-5 text-white" />
+                                {chatMessages.map((msg, index) => {
+                                    if (msg.type === 'question') {
+                                        return <QuestionMessage key={msg.id} question={msg.question} timer={timer} totalQuestions={questions.length} />;
+                                    }
+                                    return (
+                                        <div key={index} className={`flex flex-col items-start gap-2 ${msg.sender === 'user' ? 'items-end' : ''}`}>
+                                            <div className={`flex items-start gap-4 ${msg.sender === 'user' ? 'flex-row-reverse' : ''}`}>
+                                                {msg.sender === 'bot' ? (
+                                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center border border-neutral-700">
+                                                        <AiIcon className="w-5 h-5 text-white" />
+                                                    </div>
+                                                ) : (
+                                                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-neutral-700 flex items-center justify-center border border-neutal-700">
+                                                        <UserIcon className="w-5 h-5 text-white" />
+                                                    </div>
+                                                )}
+                                                <div className={`max-w-md md:max-w-lg p-4 rounded-2xl shadow-md text-sm leading-relaxed ${msg.sender === 'user' ? 'bg-neutral-600 text-white rounded-br-none' : 'bg-neutral-800 text-neutral-200 rounded-bl-none'}`}>
+                                                    <p className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong class="font-medium">$1</strong>') }}></p>
+                                                </div>
                                             </div>
-                                        )}
-                                        <div className={`max-w-md md:max-w-lg p-4 rounded-2xl shadow-md text-sm leading-relaxed ${msg.sender === 'user' ? 'bg-neutral-700 text-white rounded-br-none' : 'bg-neutral-800 text-neutral-200 rounded-bl-none'}`}>
-                                            <p className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong class="font-medium">$1</strong>') }}></p>
+                                             {msg.sender === 'user' && currentUser.name && (
+                                                <p className="text-xs text-neutral-400 mr-12">{currentUser.name}</p>
+                                            )}
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                                 {isLoading && interviewState !== 'in_progress' && (
                                     <div className="flex items-start gap-4">
-                                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center border border-neutral-700"><BotIcon className="w-5 h-5 text-white" /></div>
+                                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center border border-neutral-700"><AiIcon className="w-5 h-5 text-white" /></div>
                                         <div className="max-w-md p-4 rounded-2xl bg-neutral-800 rounded-bl-none">
                                             <div className="flex items-center space-x-2">
                                                 <span className="h-2 w-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></span>
@@ -417,29 +587,15 @@ const App = () => {
                             </div>
                         </main>
 
-                        <footer className="fixed bottom-0 p-4 bg-black/50 backdrop-blur-sm" style={{ left: isSidebarOpen ? '16rem' : '5rem', right: 0, transition: 'left 300ms ease-in-out' }}>
+                        <footer className="fixed bottom-0 p-4 bg-transparent" style={{ left: isSidebarOpen ? '16rem' : '5rem', right: 0, transition: 'left 300ms ease-in-out' }}>
                             <div className="max-w-3xl mx-auto">
-                                {interviewState === 'in_progress' && currentQuestion && (
-                                    <div className="mb-3 p-3 bg-neutral-900/70 rounded-lg border border-neutral-700">
-                                        <div className="flex justify-between items-center mb-2">
-                                            <p className="text-sm font-semibold text-neutral-300">Question {currentQuestionIndex + 1} of {questions.length}</p>
-                                            <span className={`text-xs font-bold uppercase px-2 py-1 border rounded-full ${difficultyColors[currentQuestion.difficulty]}`}>{currentQuestion.difficulty}</span>
-                                        </div>
-                                        <p className="text-white mb-3">{currentQuestion.question}</p>
-                                        <div className="flex items-center gap-2">
-                                            <p className="text-sm font-mono text-neutral-400 w-10">{timer}s</p>
-                                            <div className="w-full bg-neutral-700 rounded-full h-1.5">
-                                                <div className="bg-white h-1.5 rounded-full" style={{ width: `${(timer / currentQuestion.timeLimit) * 100}%`, transition: 'width 0.5s linear' }}></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
                                 {error && <p className="text-red-400 text-sm mb-2 text-center">{error}</p>}
-                                <form onSubmit={handleSendMessage} className={`flex items-center gap-2 bg-white rounded-full p-2 border border-neutral-700 shadow-2xl shadow-black/50 ${interviewState === 'finished' ? 'hidden' : ''}`}>
+                                <form onSubmit={handleSendMessage} className={`flex items-center gap-4 bg-neutral-900 rounded-xl p-3 border border-neutral-700 shadow-2xl shadow-black/50 ${interviewState === 'finished' ? 'hidden' : ''}`}>
                                     <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="application/pdf" className="hidden" disabled={interviewState !== 'start'} />
-                                    <button type="button" onClick={() => fileInputRef.current.click()} className="p-2 text-neutral-500 hover:text-black disabled:opacity-40 disabled:cursor-not-allowed transition-colors" disabled={interviewState !== 'start'} aria-label="Upload Resume">
-                                        <AttachmentIcon />
+                                    <button type="button" onClick={() => fileInputRef.current.click()} className="text-neutral-400 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors" disabled={interviewState !== 'start'} aria-label="Upload Resume">
+                                        <PlusIcon />
                                     </button>
+                                    
                                     <input
                                         type="text"
                                         value={userInput}
@@ -449,13 +605,11 @@ const App = () => {
                                             interviewState === 'in_progress' ? "Type your answer..." :
                                             "Interview has ended."
                                         }
-                                        className="flex-1 bg-transparent focus:outline-none px-2 text-sm text-black placeholder:text-neutral-500"
+                                        className="flex-1 bg-transparent focus:outline-none text-sm text-white placeholder:text-neutral-500"
                                         disabled={interviewState !== 'in_progress' || timer === 0}
                                     />
-                                     {/* <button type="button" className="p-2 text-neutral-500 hover:text-black" aria-label="Use Microphone">
-                                         <MicrophoneIcon />
-                                     </button> */}
-                                    <button type="submit" className="p-2 w-10 h-10 flex items-center justify-center rounded-full bg-black text-white hover:bg-neutral-800 disabled:bg-neutral-400 disabled:cursor-not-allowed transition-colors" disabled={!userInput.trim() || interviewState !== 'in_progress' || timer === 0} aria-label="Send Message">
+                                
+                                    <button type="submit" className="text-neutral-400 hover:text-white disabled:text-neutral-600 disabled:cursor-not-allowed transition-colors" disabled={!userInput.trim() || interviewState !== 'in_progress' || timer === 0} aria-label="Send Message">
                                         <SendIcon />
                                     </button>
                                 </form>
