@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 
 // --- SVG Icon Components ---
 const PlusIcon = () => (
@@ -56,8 +56,102 @@ const TimerIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-timer text-neutral-400"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
 );
 
+const SortIcon = ({ direction }) => {
+    if (!direction) return <svg width="16" height="16" className="inline-block ml-1 opacity-20" viewBox="0 0 24 24"><path d="m7 15 5-5 5 5" fill="none" stroke="currentColor" strokeWidth="2"/><path d="m7 9 5 5 5-5" fill="none" stroke="currentColor" strokeWidth="2"/></svg>;
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block ml-1">
+            {direction === 'ascending' ? <path d="m18 15-6-6-6 6"/> : <path d="m6 9 6 6 6-6"/>}
+        </svg>
+    );
+};
+
+
 // --- Dashboard Component ---
 const Dashboard = ({ results, switchToChat }) => {
+    const [selectedInterview, setSelectedInterview] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'ascending' });
+
+    const sortedAndFilteredResults = useMemo(() => {
+        let sortableItems = [...results];
+
+        // Filter logic
+        const filteredItems = sortableItems.filter(item => 
+            (item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase())) || 
+            (item.email && item.email.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+
+        // Sort logic
+        if (sortConfig.key) {
+            filteredItems.sort((a, b) => {
+                const aValue = a[sortConfig.key];
+                const bValue = b[sortConfig.key];
+
+                if (aValue < bValue) {
+                    return sortConfig.direction === 'ascending' ? -1 : 1;
+                }
+                if (aValue > bValue) {
+                    return sortConfig.direction === 'ascending' ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+        
+        return filteredItems;
+    }, [results, sortConfig, searchTerm]);
+
+    const requestSort = (key) => {
+        let direction = 'ascending';
+        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+            direction = 'descending';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    // View for a single selected interview's details
+    if (selectedInterview) {
+        return (
+            <div className="flex-1 overflow-y-auto p-4 md:p-8 text-white">
+                <div className="max-w-4xl mx-auto">
+                    <div className="flex justify-between items-center mb-8">
+                        <h1 className="text-3xl font-bold">Interview Details</h1>
+                        <button onClick={() => setSelectedInterview(null)} className="bg-neutral-800 hover:bg-neutral-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                            Back to Dashboard
+                        </button>
+                    </div>
+                    <div className="bg-black/30 backdrop-blur-md border border-neutral-800 rounded-xl shadow-lg p-6 md:p-8 space-y-4">
+                        <div className="flex flex-col md:flex-row justify-between md:items-center">
+                            <div>
+                                <h2 className="text-2xl font-bold text-white">{selectedInterview.name}</h2>
+                                <p className="text-neutral-400">{selectedInterview.email}</p>
+                            </div>
+                            <p className={`text-3xl font-bold mt-4 md:mt-0 ${selectedInterview.percentage >= 80 ? 'text-green-400' : selectedInterview.percentage >= 60 ? 'text-yellow-400' : 'text-red-400'}`}>
+                                {selectedInterview.percentage}%
+                            </p>
+                        </div>
+                        <div className="border-t border-neutral-700 my-6"></div>
+                        <div>
+                             <h3 className="text-xl font-semibold mb-4 text-neutral-200">Questions & Answers</h3>
+                             <div className="space-y-6">
+                                {selectedInterview.qa && selectedInterview.qa.length > 0 ? (
+                                    selectedInterview.qa.map((item, index) => (
+                                        <div key={index} className="p-4 rounded-lg bg-neutral-800/50 border border-neutral-700/50">
+                                            <p className="font-bold text-neutral-300">Q{index + 1}: {item.question}</p>
+                                            <p className="mt-3 text-white whitespace-pre-wrap pl-4 border-l-2 border-neutral-600">{item.answer}</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-neutral-500">No questions and answers were recorded for this interview.</p>
+                                )}
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Main dashboard view with the table of results
     return (
         <div className="flex-1 overflow-y-auto p-4 md:p-8 text-white">
             <div className="max-w-4xl mx-auto">
@@ -68,20 +162,36 @@ const Dashboard = ({ results, switchToChat }) => {
                     </button>
                 </div>
                 
+                <div className="mb-6">
+                    <input
+                        type="text"
+                        placeholder="Search by name or email..."
+                        className="w-full p-3 bg-neutral-900/50 border border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500 text-white placeholder:text-neutral-500"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+
                 <div className="bg-black/30 backdrop-blur-md border border-neutral-800 rounded-xl shadow-lg">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
                             <thead>
                                 <tr className="border-b border-neutral-700">
-                                    <th className="p-4 text-sm font-semibold uppercase text-neutral-400">Name</th>
-                                    <th className="p-4 text-sm font-semibold uppercase text-neutral-400">Email</th>
-                                    <th className="p-4 text-sm font-semibold uppercase text-neutral-400 text-right">Score</th>
+                                    <th className="p-4 text-sm font-semibold uppercase text-neutral-400 cursor-pointer hover:text-white transition-colors" onClick={() => requestSort('name')}>
+                                        Name <SortIcon direction={sortConfig.key === 'name' ? sortConfig.direction : null} />
+                                    </th>
+                                    <th className="p-4 text-sm font-semibold uppercase text-neutral-400 cursor-pointer hover:text-white transition-colors" onClick={() => requestSort('email')}>
+                                        Email <SortIcon direction={sortConfig.key === 'email' ? sortConfig.direction : null} />
+                                    </th>
+                                    <th className="p-4 text-sm font-semibold uppercase text-neutral-400 text-right cursor-pointer hover:text-white transition-colors" onClick={() => requestSort('percentage')}>
+                                        Score <SortIcon direction={sortConfig.key === 'percentage' ? sortConfig.direction : null} />
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {results.length > 0 ? (
-                                    results.map((result) => (
-                                        <tr key={result.id} className="border-b border-neutral-800 hover:bg-neutral-800/50 transition-colors">
+                                {sortedAndFilteredResults.length > 0 ? (
+                                    sortedAndFilteredResults.map((result) => (
+                                        <tr key={result.id} onClick={() => setSelectedInterview(result)} className="border-b border-neutral-800 hover:bg-neutral-800/50 transition-colors cursor-pointer">
                                             <td className="p-4 whitespace-nowrap">{result.name}</td>
                                             <td className="p-4 whitespace-nowrap">{result.email}</td>
                                             <td className="p-4 whitespace-nowrap text-right">
@@ -94,7 +204,7 @@ const Dashboard = ({ results, switchToChat }) => {
                                 ) : (
                                     <tr>
                                         <td colSpan="3" className="text-center p-8 text-neutral-500">
-                                            No interview results yet. Complete an interview to see your score here.
+                                            {searchTerm ? 'No results match your search.' : 'No interview results yet.'}
                                         </td>
                                     </tr>
                                 )}
@@ -151,7 +261,7 @@ const Sidebar = ({ isOpen, setView, handleRestart, onMouseLeave }) => (
         className={`fixed top-0 left-0 h-full bg-black/30 backdrop-blur-md border-r border-neutral-800 z-30 text-white flex flex-col transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-20'}`}
     >
         <div className="flex items-center justify-center h-20 border-b border-neutral-800 shrink-0">
-              <MenuIcon className="w-8 h-8 text-white"/>
+            <MenuIcon className="w-8 h-8 text-white"/>
         </div>
         <nav className="flex-1 py-4">
             <ul>
@@ -173,7 +283,7 @@ const Sidebar = ({ isOpen, setView, handleRestart, onMouseLeave }) => (
 );
 
 // --- Question Message Component ---
-const QuestionMessage = ({ question, timer, totalQuestions }) => {
+const QuestionMessage = ({ question, timer, totalQuestions, isCurrent }) => {
     const difficultyColors = {
         easy: 'text-green-400 border-green-400',
         medium: 'text-yellow-400 border-yellow-400',
@@ -192,10 +302,12 @@ const QuestionMessage = ({ question, timer, totalQuestions }) => {
                 </div>
                 <p className="text-white mb-3">{question.question}</p>
                 <div className="flex justify-end items-center mt-2">
-                    <div className="flex items-center gap-2 bg-neutral-900/50 px-3 py-1 rounded-full border border-neutral-700">
-                        <TimerIcon />
-                        <p className="text-lg font-mono text-white font-semibold">{timer}<span className="text-sm text-neutral-400">s</span></p>
-                    </div>
+                    {isCurrent && (
+                        <div className="flex items-center gap-2 bg-neutral-900/50 px-3 py-1 rounded-full border border-neutral-700">
+                            <TimerIcon />
+                            <p className="text-lg font-mono text-white font-semibold">{timer}<span className="text-sm text-neutral-400">s</span></p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
@@ -205,7 +317,7 @@ const QuestionMessage = ({ question, timer, totalQuestions }) => {
 // --- Main App Component ---
 export default function App() {
     const initialState = {
-        chatMessages: [{ sender: 'bot', text: "Hello! I am your AI interviewer. Please upload your resume to begin the interview." }],
+        chatMessages: [{ sender: 'bot', text: "Welcome to your AI-powered interview simulation. To begin, please upload your resume in PDF format." }],
         userInput: '',
         isLoading: false,
         error: '',
@@ -324,7 +436,6 @@ export default function App() {
             5. The questions must include 2 'easy' (20 seconds), 2 'medium' (60 seconds), and 2 'hard' (120 seconds).
             6. Respond ONLY with a JSON object like: {"validation": {"success": true, "name": "John Doe", "email": "john.doe@example.com", "phone": "123-456-7890"}, "questions": [{"question": "...", "difficulty": "easy", "timeLimit": 20}, ...]}. Do not include any other text, explanation or markdown formatting.`;
 
-            // FIX: Using a stable, recommended multimodal model
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
             const payload = {
                 contents: [{ role: "user", parts: [{ text: prompt }, resumeContentForAPI] }],
@@ -411,7 +522,6 @@ export default function App() {
             
             ${answersText}`;
             
-            // FIX: Using a stable, recommended multimodal model
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
             const payload = {
                 contents: [{ role: "user", parts: [{ text: prompt }, resumeContext] }],
@@ -431,7 +541,7 @@ export default function App() {
             const finalMessage = `**Interview Complete! Your score is ${percentage}%.**\n\nHere is your feedback:\n\n${evaluation}`;
             setChatMessages(prev => [...prev, { sender: 'bot', text: finalMessage }]);
 
-            const newResult = { id: Date.now(), ...currentUser, percentage };
+            const newResult = { id: Date.now(), ...currentUser, percentage, qa: finalAnswers };
             const updatedResults = [...dashboardResults, newResult];
             setDashboardResults(updatedResults);
             localStorage.setItem('interviewDashboardResults', JSON.stringify(updatedResults));
@@ -485,7 +595,14 @@ export default function App() {
                             <div className="max-w-3xl mx-auto space-y-8">
                                 {chatMessages.map((msg, index) => {
                                     if (msg.type === 'question') {
-                                        return <QuestionMessage key={msg.id} question={msg.question} timer={timer} totalQuestions={questions.length} />;
+                                        const isCurrent = msg.question.index === currentQuestionIndex && interviewState === 'in_progress';
+                                        return <QuestionMessage 
+                                            key={msg.id} 
+                                            question={msg.question} 
+                                            timer={timer} 
+                                            totalQuestions={questions.length} 
+                                            isCurrent={isCurrent} 
+                                        />;
                                     }
                                     return (
                                         <div key={index} className={`flex flex-col items-start gap-2 ${msg.sender === 'user' ? 'items-end' : ''}`}>
@@ -559,3 +676,4 @@ export default function App() {
         </div>
     );
 };
+
